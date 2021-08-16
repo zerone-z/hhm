@@ -81,7 +81,6 @@ Fireworks.prototype = {
     seed.born=this.frames;
     this.seeds.push(seed);
   },
-  abcd: 0,
   splode: function(x,y,z){
     let t=5+parseInt(Math.random()*150);
     let sparkV=1+Math.random()*2.5;
@@ -137,11 +136,6 @@ Fireworks.prototype = {
     }
     let d=Math.sqrt((x-this.playerX)*(x-this.playerX)+(y-this.playerY)*(y-this.playerY)+(z-this.playerZ)*(z-this.playerZ));
     pow.volume=1.5/(1+d/10);
-    this.abcd++
-    if(this.abcd == 1){
-      console.log(pow,'=========')
-    }
-    
     pow.load()
     pow.play();
   },

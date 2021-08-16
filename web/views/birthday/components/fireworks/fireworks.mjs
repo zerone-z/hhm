@@ -4,50 +4,81 @@ import DrawFireworks from "./vender/draw-fireworks.mjs";
 export default {
   render() {
     return h(
-      "div", {
+      "div", 
+      {
         class: "fireworks",
-        style: Style.fireworks,
+        style: Style.fireworks.style
       },
-      [
-        h(
-          "canvas",
-          {
-            class: "canvas",
-            style: Style.canvas,
-            ref: "canvas",
-          },
-        )
-      ]
+      h(
+        "div", {
+          class: "fireworksContent",
+          style: Style.fireworksContent.style,
+          onClick: ($event) => { this.clickEvent($event) }
+        },
+        [
+          h(
+            "canvas",
+            {
+              class: "canvas",
+              style: Style.canvas.style,
+              ref: "canvas",
+            },
+          )
+        ]
+      )
     );
   },
   data: () => ({
-    canvaInterval: 0,
-    // fireworks: null,
+    timeLeft: 5, // 秒
   }),
   mounted () {
-    this.drawFireworks();
   },
   methods: {
+    run() {
+      this.drawFireworks();
+      this.timeLeft = 5;
+      this.interval = setInterval(() => {
+        this.timeLeft -= 1;
+        if (this.timeLeft <= 0) {
+          clearInterval(this.interval);
+        }
+      }, 1000);
+    },
     drawFireworks() {
       if (!this.fireworks) {
         this.fireworks = new DrawFireworks(this.$refs.canvas);
       }
       this.fireworks.frame();
     },
+    clickEvent() {
+      if (this.timeLeft <= 0) {
+        this.$emit("stop");
+      }
+    },
   }
 }
 // 样式设置
 let Style = {
   fireworks: {
-    width: "100%",
-    height: "100%",
-    display: "flex",
-    flexDirection: "column",
-    backgroundColor: "#000"
+    style: {
+      width: "100%",
+      height: "100%",
+    }
+  },
+  fireworksContent: {
+    style: {
+      width: "100%",
+      height: "100%",
+      display: "flex",
+      flexDirection: "column",
+      backgroundColor: "#000",
+    }
   },
   canvas: {
-    width: "100%",
-    height: "100%",
-    flex: "1",
+    style: {
+      width: "100%",
+      height: "100%",
+      flex: "1",
+    }
   }
 }

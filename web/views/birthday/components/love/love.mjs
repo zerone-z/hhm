@@ -1,76 +1,115 @@
-const { h } = Vue;
+const { h, Transition } = Vue;
 // Vue组件
 export default {
-  name: "love",
+  name: "Love",
   render() {
     return h(
-      "div", {
-        class: "love",
-        style: Style.love.style,
+      "div", 
+      {
+        class: "Love",
+        style: Style.love.style
       },
-      [
+      h(
+        "div", {
+          class: "loveContent",
+          style: Style.loveContent.style,
+        },
         h(
-          "div",
+          Transition,
           {
-            class: "beating-heart",
-            style: Style.beatingHeart.style,
+            mode: "out-in",
+            css: false,
+            onBeforeEnter: (el) => { this.beforeEnterEvent(el) },
+            onEnter: (el, done) => { this.enterEvent(el, done) },
+            onAfterEnter: (el) => { this.afterEnterEvent(el) },
+            onEnterCancelled: (el) => { this.enterCancelledEvent(el) },
+            onBeforeLeave: (el) => { this.beforeLeaveEvent(el) },
+            onLeave: (el, done) => { this.leaveEvent(el, done) },
+            onLeaveCancelled: (el) => { this.leaveCancelledEvent(el) },
           },
-          [
-            h(
-              "div",
-              {
-                class: "heart",
-                style: Style.heart.style,
+          {
+            default: () => {
+              if (this.currentStep == 0) {
+                return h(
+                  "div",
+                  {
+                    class: "prologue",
+                    style: Style.prologue.style,
+                    ref: "prologue",
+                    key: "prologue",
+                  },
+                );
               }
-            ),
-            h(
-              "div",
-              {
-                class: "happy-word",
-                style: Style.happyWord.style,
-              },
-              "HAPPY".split("").map((char, index) => {
+              if (this.currentStep == 1) {
                 return h(
-                  "span", 
+                  "div",
                   {
-                    class: "char" + (index + 1),
-                    style: Style.happyWord["char" + (index + 1)].style
+                    class: "beating-heart",
+                    style: Style.beatingHeart.style,
+                    key: "beating-heart",
+                    onClick: ($event) => { this.$emit("stop") }
                   },
-                  char
-                )
-              })
-            ),
-            h(
-              "div",
-              {
-                class: "birth-word",
-                style: Style.birthWord.style,
-              },
-              "BIRTH",
-            ),
-            h(
-              "div",
-              {
-                class: "day-word",
-                style: Style.dayWord.style,
-              },
-              "DAY".split("").map((char, index) => {
-                return h(
-                  "span", 
-                  {
-                    class: "char" + (index + 1),
-                    style: Style.dayWord["char" + (index + 1)].style
-                  },
-                  char
-                )
-              })
-            ),
-          ]
+                  [
+                    h(
+                      "div",
+                      {
+                        class: "heart",
+                        style: Style.heart.style,
+                      }
+                    ),
+                    h(
+                      "div",
+                      {
+                        class: "happy-word",
+                        style: Style.happyWord.style,
+                      },
+                      "HAPPY".split("").map((char, index) => {
+                        return h(
+                          "span", 
+                          {
+                            class: "char" + (index + 1),
+                            style: Style.happyWord["char" + (index + 1)].style
+                          },
+                          char
+                        )
+                      })
+                    ),
+                    h(
+                      "div",
+                      {
+                        class: "birth-word",
+                        style: Style.birthWord.style,
+                      },
+                      "BIRTH",
+                    ),
+                    h(
+                      "div",
+                      {
+                        class: "day-word",
+                        style: Style.dayWord.style,
+                      },
+                      "DAY".split("").map((char, index) => {
+                        return h(
+                          "span", 
+                          {
+                            class: "char" + (index + 1),
+                            style: Style.dayWord["char" + (index + 1)].style
+                          },
+                          char
+                        )
+                      })
+                    ),
+                  ]
+                );
+              }
+            }
+          }
         )
-      ]
+      )
     );
   },
   data: () => ({
+    currentStep: 0,
   }),
   created() {
     Style.init();
@@ -78,6 +117,62 @@ export default {
   mounted () {
   },
   methods: {
+    run() {
+      this.typeingContent();
+    },
+    typeingContent() {
+      let progress = 0;
+      let typingContent = this.$store.state.prologue;
+			this.codeInterval = setInterval(() => {
+				var current = typingContent.substr(progress, 1);
+				if (current == "<") {
+					progress = typingContent.indexOf(">", progress) + 1;
+				} else {
+					progress++;
+				}
+				this.$refs.prologue.innerHTML = typingContent.substring(0, progress) + (progress & 1 ? '_' : '');
+				if (progress >= typingContent.length) {
+					clearInterval(this.codeInterval);
+          this.codeInterval = 0;
+          this.$refs.prologue.innerHTML = typingContent;
+          let timeoutInterval = setTimeout(() => {
+            this.currentStep += 1;
+            clearTimeout(timeoutInterval);
+          }, 1000);
+				}
+			}, 200);
+    },
+    beforeEnterEvent(el) {
+      gsap.set(el, {
+        opacity: 0,
+      })
+    },
+    enterEvent(el, done) {
+      gsap.to(el, {
+        duration: 1,
+        opacity: 1,
+        onComplete: done,
+      })
+    },
+    afterEnterEvent(el) {
+      console.log("afterEnterEvent");
+    },
+    enterCancelledEvent(el) {
+      console.log("enterCancelledEvent");
+    },
+    beforeLeaveEvent(el) {
+      console.log("beforeLeaveEvent");
+    },
+    leaveEvent(el, done) {
+      gsap.to(el, {
+        duration: 1,
+        opacity: 0,
+        onComplete: done,
+      })
+    },
+    leaveCancelledEvent() {
+      console.log("leaveCancelledEvent");
+    },
   }
 }
 // 样式设置
@@ -164,20 +259,32 @@ let Style = {
     style: {
       width: "100%",
       height: "100%",
+    }
+  },
+  loveContent: {
+    style: {
+      width: "100%",
+      height: "100%",
       display: "flex",
       flexDirection: "column",
       background: "radial-gradient(ellipse at center, #d84a4a 0%, #ba1919 100%)",
       position: "relative",
+      alignItems: "center",
+      justifyContent: "center",
+    }
+  },
+  prologue: {
+    style: {
+      width: "300px",
+      fontSize: "1em",
+      color: "white",
     }
   },
   beatingHeart: {
     style: {
       position: "relative",
-      top: "50%",
-      left: "50%",
       width: "100%",
       height: "512px",
-      transform: "translate(-50%, -50%)",
       color: "#ffffff",
       fontSize: "2.0em",
       fontWeight: "bold",
