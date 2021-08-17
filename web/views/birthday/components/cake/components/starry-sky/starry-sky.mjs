@@ -111,7 +111,7 @@ let Style = {
     }
     let pageStyle = document.createElement("style");
     pageStyle.media = "screen";
-    pageStyle.scoped = true;
+    pageStyle.setAttribute("scoped", "");
     pageStyle.id = "StarrySkyStyle";
     pageStyle.innerHTML = 
     `

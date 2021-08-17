@@ -29,7 +29,7 @@ function Fireworks(canvas) {
   this.pow3=new Audio(this.s+"pow3.ogg");
   this.pow4=new Audio(this.s+"pow4.ogg");
   this.frames = 0;
-
+  this.runState = -1; // 运行状态 -1 ： 未运行； 1 ： 运行中 ； 0 ： 运行结束；
   window.addEventListener("resize", ()=> {
     this.canvas.width=this.canvas.clientWidth;
     this.canvas.height=this.canvas.clientHeight;
@@ -268,18 +268,33 @@ Fireworks.prototype = {
       this.frames=0;
     }
     this.frames++;
+    if (this.runState == 0) {
+      return;
+    }
     this.draw();
     this.doLogic();
-    
+  },
+  startFrames: function() {
+    this.runState = 1;
+    this.seedTimer=0;
+    this.frames=0;
     this.lastTime = new Date().getTime();
     let animloop = () => {
+      if (this.runState == 0) {
+        return;
+      }
       let currTime = new Date().getTime();
       if (currTime - this.lastTime > 60)  {
+        this.lastTime = currTime;
         this.frame();
       }
-      window.requestAnimationFrame(animloop);
+      this.rafID = window.requestAnimationFrame(animloop);
     }
-    window.requestAnimationFrame(animloop)
+    this.rafID = window.requestAnimationFrame(animloop);
+  },
+  stopFrames: function() {
+    cancelAnimationFrame(this.rafId);
+    this.runState = 0;
   }
 };
 

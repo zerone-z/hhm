@@ -29,31 +29,41 @@ export default {
     );
   },
   data: () => ({
-    timeLeft: 5, // 秒
+    allowClick: false, // 允许点击
   }),
   mounted () {
+  },
+  destroyed () {
+    if (this.fireworks) {
+      this.fireworks.stopFrames();
+    }
   },
   methods: {
     run() {
       this.drawFireworks();
-      this.timeLeft = 5;
-      this.interval = setInterval(() => {
-        this.timeLeft -= 1;
-        if (this.timeLeft <= 0) {
-          clearInterval(this.interval);
-        }
-      }, 1000);
+      this.allowClick = false;
+      this.timeTimeout = setTimeout(() => {
+        this.allowClick = true;
+        clearInterval(this.timeTimeout);
+        this.timeTimeout = 0;
+      }, 5000);
+    },
+    stop() {
+      if (this.fireworks) {
+        this.fireworks.stopFrames();
+      }
     },
     drawFireworks() {
       if (!this.fireworks) {
         this.fireworks = new DrawFireworks(this.$refs.canvas);
       }
-      this.fireworks.frame();
+      this.fireworks.startFrames();
     },
     clickEvent() {
-      if (this.timeLeft <= 0) {
-        this.$emit("stop");
+      if (!this.allowClick) {
+        return;
       }
+      this.$emit("stop");
     },
   }
 }

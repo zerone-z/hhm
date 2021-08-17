@@ -204,10 +204,23 @@ export default {
   mounted () {
     Style.init(this.$refs.cake);
   },
+  destroyed () {
+    if (this.cake) {
+      this.cake.stopDrawn();
+    }
+    if (this.timeInterval) {
+      clearTimeout(this.timeInterval);
+      this.timeInterval = 0;
+    }
+    if (this.codeInterval) {
+      clearInterval(this.codeInterval);
+      this.codeInterval = 0;
+    }
+  },
   methods: {
     run () {
-      if (this.interval) {
-        clearTimeout(this.interval);
+      if (this.timeInterval) {
+        clearTimeout(this.timeInterval);
       }
       this.drawCake();
       // 初始化已经显示的话
@@ -216,7 +229,11 @@ export default {
       let typingContent = this.$store.state.happyWords;
       this.typingContent(typingContent);
       // 时间计时器
-      this.interval = setInterval(() => {
+      this.timeInterval = setInterval(() => {
+        if (!this || !this.cake) {
+          clearTimeout(this.timeInterval);
+          return;
+        }
         if (this.cake.runState == 0) {
           this.showCanvasInfo = true;
         }
@@ -241,6 +258,19 @@ export default {
         this.love.second = diffLove % 60;
       }, 60);
     },
+    stop() {
+      if (this.cake) {
+        this.cake.stopDrawn();
+      }
+      if (this.timeInterval) {
+        clearTimeout(this.timeInterval);
+        this.timeInterval = 0;
+      }
+      if (this.codeInterval) {
+        clearInterval(this.codeInterval);
+        this.codeInterval = 0;
+      }
+    },
     // 画蛋糕
     drawCake() {
       if (!this.cake) {
@@ -258,6 +288,10 @@ export default {
       }
       let progress = 0;
 			this.codeInterval = setInterval(() => {
+        if (!this || !this.cake) {
+          clearTimeout(this.codeInterval);
+          return;
+        }
 				let current = typingContent.substr(progress, 1);
 				if (current == "<") {
 					progress = typingContent.indexOf(">", progress) + 1;
@@ -271,6 +305,10 @@ export default {
           this.codeInterval = 0;
           this.$emit("stop");
           let timeout = setTimeout(() => {
+            if (!this || !this.dissipateWords) {
+              clearTimeout(timeout);
+              return;
+            }
             clearTimeout(timeout);
             this.dissipateWords(typingContent, isOne);
           }, 1000 * 5);
@@ -307,6 +345,10 @@ export default {
       }
       this.$refs.code.innerHTML = htmlString;
       let timeout = setTimeout(() => {
+        if (!this || !this.excludeWish) {
+          clearTimeout(timeout);
+          return;
+        }
         if (this.excludeWish.length == this.$store.state.historyWish.length ) {
           this.excludeWish = [];
         }
@@ -351,7 +393,7 @@ let Style = {
     }
     let pageStyle = document.createElement("style");
     pageStyle.media = "screen";
-    pageStyle.scoped = true;
+    pageStyle.setAttribute("scoped", "");
     pageStyle.id = "CakeStyle";
     pageStyle.innerHTML = 
     `

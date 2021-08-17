@@ -6,7 +6,8 @@ export default {
     return h(
       "div", {
         class: "hhm-views",
-        style: Style.views,
+        style: Style.views.style,
+        ref: "views",
       },
       null,
       h(
@@ -25,7 +26,7 @@ export default {
                     props.Component ? resolveDynamicComponent(props.Component) : "div",
                     {
                       class: "hhm-view",
-                      style: Style.view,
+                      style: Style.view.style,
                     }
                   )
                 )
@@ -35,19 +36,47 @@ export default {
         }
       )
     );
+  },
+  mounted () {
+    Style.init(this.$refs.views);
   }
 }
 // 样式设置
 let Style = {
+  init(el) {
+    if (document.getElementById("hhm-views")) {
+      return;
+    }
+    let pageStyle = document.createElement("style");
+    pageStyle.media = "screen";
+    pageStyle.setAttribute("scoped", "");
+    pageStyle.id = "hhm-views";
+    pageStyle.innerHTML = css;
+    el.appendChild(pageStyle);
+  },
   views: {
-    width: "100%",
-    height: "100%",
+    style: {
+
+    }
   },
   view: {
-    position: "relative",
-    width: "100%",
-    height: "100%",
-    overflowY: "auto",
-    overflowX: "hidden",
+    style: {
+      
+    }
   }
 }
+
+// CSS 样式
+let css = `
+.hhm-views {
+  width: 100%;
+  height: 100%;
+}
+.hhm-view {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+`

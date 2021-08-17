@@ -120,6 +120,12 @@ export default {
     run() {
       this.typeingContent();
     },
+    stop() {
+      if (this.codeInterval) {
+        clearInterval(this.codeInterval);
+        this.codeInterval = 0;
+      }
+    },
     typeingContent() {
       let progress = 0;
       let typingContent = this.$store.state.prologue;
