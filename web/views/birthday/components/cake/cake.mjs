@@ -364,8 +364,8 @@ export default {
         }
         let wish = this.$store.state.historyWish[nextIndex];
         let nextTypuingContent = `
-        <p style="width: 345px">${wish.greetings}</p>
-        <p style="text-align: right; width: 345px">—— ${wish.age}岁 • ${wish.gift}</p>
+        <p style="width:345px;font-size:1.2em;">${wish.greetings}</p>
+        <p style="text-align:right;width:345px;font-size:1.2em;">—— ${wish.age}岁 • ${wish.gift}</p>
         `;
         this.typingContent(nextTypuingContent, true);
         clearTimeout(timeout);
@@ -497,7 +497,6 @@ let Style = {
       width: "100%",
       height: "60%",
       fontFamily: '"Consolas","Monaco","Bitstream Vera Sans Mono","Courier New","sans-serif"',
-      fontSize: "12px",
       color: "white",
       padding: "15px",
       boxSizing: "border-box",

@@ -282,7 +282,7 @@ let Style = {
   prologue: {
     style: {
       width: "300px",
-      fontSize: "1em",
+      fontSize: "1.2em",
       color: "white",
     }
   },
