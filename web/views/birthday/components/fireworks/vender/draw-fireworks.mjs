@@ -24,10 +24,18 @@ function Fireworks(canvas) {
     this.sparkPics.push(sparkPic);
   }
   this.sparks=new Array();
-  this.pow1=new Audio(this.s+"pow1.ogg");
-  this.pow2=new Audio(this.s+"pow2.ogg");
-  this.pow3=new Audio(this.s+"pow3.ogg");
-  this.pow4=new Audio(this.s+"pow4.ogg");
+  // this.pow1=new Audio(this.s+"pow1.ogg");
+  this.pow1=document.getElementById("pow1");
+  this.pow1.load();
+  // this.pow2=new Audio(this.s+"pow2.ogg");
+  this.pow2=document.getElementById("pow2");
+  this.pow2.load();
+  // this.pow3=new Audio(this.s+"pow3.ogg");
+  this.pow3=document.getElementById("pow3");
+  this.pow3.load()
+  // this.pow4=new Audio(this.s+"pow4.ogg");
+  this.pow4=document.getElementById("pow4");
+  this.pow4.load()
   this.frames = 0;
   this.runState = -1; // 运行状态 -1 ： 未运行； 1 ： 运行中 ； 0 ： 运行结束；
   window.addEventListener("resize", ()=> {
@@ -129,14 +137,14 @@ Fireworks.prototype = {
     }
     let pow;
     switch(parseInt(Math.random()*4)){
-      case 0: pow=new Audio(this.s+"pow1.ogg"); break;
-      case 1: pow=new Audio(this.s+"pow2.ogg"); break;
-      case 2: pow=new Audio(this.s+"pow3.ogg"); break;
-      case 3: pow=new Audio(this.s+"pow4.ogg"); break;
+      case 0: pow=this.pow1; break;
+      case 1: pow=this.pow2; break;
+      case 2: pow=this.pow3; break;
+      case 3: pow=this.pow4; break;
     }
     let d=Math.sqrt((x-this.playerX)*(x-this.playerX)+(y-this.playerY)*(y-this.playerY)+(z-this.playerZ)*(z-this.playerZ));
     pow.volume=1.5/(1+d/10);
-    pow.load()
+    // pow.load()
     pow.play();
   },
   doLogic: function(){

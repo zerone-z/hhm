@@ -12,6 +12,7 @@ export default {
         class: "cake",
         style: Style.cake.style,
         ref: "cake",
+        onClick: ($event) => { this.clickEvent($event) }
       },
       [
         h(
@@ -188,6 +189,7 @@ export default {
     cake: null,
     showCanvasInfo: false,
     excludeWish: [],
+    allowClick: false,
     meet: {
       day: 0,
       hour: 0,
@@ -303,7 +305,7 @@ export default {
           this.$refs.code.innerHTML = typingContent;
 					clearInterval(this.codeInterval);
           this.codeInterval = 0;
-          this.$emit("stop");
+          this.allowClick = true;
           let timeout = setTimeout(() => {
             if (!this || !this.dissipateWords) {
               clearTimeout(timeout);
@@ -317,33 +319,40 @@ export default {
     },
     // 消散文本
     dissipateWords(words, isOne) {
-      let htmlString = "";
       let maxDelay = 3;
-      let wordCount = 0;
-      for (let i = 0; i < words.length; i++) {
-        let char = words.substr(i, 1);
-        if (char == "<") {
-					let tagEndIndex = words.indexOf(">", i) + 1;
-          htmlString += words.substring(i, tagEndIndex);
-          i = tagEndIndex - 1;
-          continue;
-				}
-        char = words.substr(i, 1);
-        if (char == " ") {
-          char = "&nbsp;"
-        }
-        let delay = 3;
-        if (isOne) {
+      if (isOne) {
+        let htmlString = "";
+        let wordCount = 0;
+        for (let i = 0; i < words.length; i++) {
+          let char = words.substr(i, 1);
+          if (char == "<") {
+            let tagEndIndex = words.indexOf(">", i) + 1;
+            htmlString += words.substring(i, tagEndIndex);
+            i = tagEndIndex - 1;
+            continue;
+          }
+          char = words.substr(i, 1);
+          if (char == " ") {
+            char = "&nbsp;"
+          }
+          let delay = 3;
           wordCount++;
           delay = 3 + 0.1 * wordCount;
-        } else {
-          delay = 3 + 0.5 * Math.floor(Math.random() * 10 + 1);
+          let spanEl = `<span style="-webkit-animation-delay: ${delay}s;animation-delay: ${delay}s;">${char}</span>`
+          htmlString += spanEl;
+          maxDelay = Math.max(delay, maxDelay);
         }
-        let spanEl = `<span style="-webkit-animation-delay: ${delay}s;animation-delay: ${delay}s;">${char}</span>`
-        htmlString += spanEl;
-        maxDelay = Math.max(delay, maxDelay);
+        this.$refs.code.innerHTML = htmlString;
+      } else {
+        gsap.to(this.$refs.code, {
+          duration: maxDelay,
+          opacity: 0,
+          onComplete: () => {
+            this.$refs.code.innerHTML = "";
+            this.$refs.code.style.opacity = 1;
+          }
+        });
       }
-      this.$refs.code.innerHTML = htmlString;
       let timeout = setTimeout(() => {
         if (!this || !this.excludeWish) {
           clearTimeout(timeout);
@@ -378,11 +387,19 @@ export default {
     },
     enterEvent(el, done) {
       gsap.to(el, {
-        duration: 1,
+        repeat: -1,
+        yoyo: true,
+        duration: 2,
         opacity: 1,
         onComplete: done,
       })
     },
+    clickEvent() {
+      if (!this.allowClick) {
+        return;
+      }
+      this.$emit("stop");
+    }
   }
 }
 // 样式设置
@@ -411,6 +428,11 @@ let Style = {
       -moz-perspective: 1000;
       -ms-perspective: 1000;
       perspective: 1000;
+      transform-style: preserve-3d;
+      -moz-transform-style: preserve-3d;
+      -webkit-transform-style: preserve-3d;   
+      -ms-transform-style: preserve-3d;              
+      -o-transform-style: preserve-3d;
     }
     .cake .code span:nth-child(even) {
       -webkit-animation-name: smoky-mirror;
@@ -459,14 +481,6 @@ let Style = {
                 transform: translate3d(26px, -11px, 0) rotate(-40deg) skewX(-70deg) scale(2);
         text-shadow: 0 0 5px whitesmoke;
         opacity: 0;
-      }
-    }
-    @keyframes light{
-      from{
-        opacity: 1;
-      }
-      to{
-        opacity: 0.2;
       }
     }
     `;
@@ -531,11 +545,6 @@ let Style = {
       minWidth: "300px",
       minHeight: "300px",
       color: "#fc6285",
-      animationName: "light",
-      animationDuration: "2s",
-      animationTimingFunction: "linear",
-      animationIterationCount: "infinite",
-      animationDirection: "alternate",
     },
   },
   eachOtherMeet: {
