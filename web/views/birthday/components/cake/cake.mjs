@@ -68,51 +68,17 @@ export default {
                             "span",
                             {
                               class: "meet-desc",
-                              style: Style.eachOtherMeet.desc.style,
                             },
-                            "我们已经认识了:",
+                            "亲爱的老婆：",
                           ),
                           h(
                             "span",
                             {
                               class: "meet-desc",
-                              style: Style.eachOtherMeet.time.style,
+                              style: Style.eachOtherMeet.desc.style,
                             },
-                            [
-                              h(
-                                "span", {
-                                  class: "time",
-                                  style: Style.time.style,
-                                },
-                                this.meet.day,
-                              ),
-                              "天",
-                              h(
-                                "span", {
-                                  class: "time",
-                                  style: Style.time.style,
-                                },
-                                this.meet.hour,
-                              ),
-                              "小时",
-                              h(
-                                "span", {
-                                  class: "time",
-                                  style: Style.time.style,
-                                },
-                                this.meet.minute,
-                              ),
-                              "分",
-                              h(
-                                "span", {
-                                  class: "time",
-                                  style: Style.time.style,
-                                },
-                                this.meet.second,
-                              ),
-                              "秒",
-                            ]
-                          )
+                            "生日快乐，永远开心！",
+                          ),
                         ]
                       ),
                       h(
@@ -128,48 +94,7 @@ export default {
                               class: "love-desc",
                               style: Style.eachOtherLove.desc.style,
                             },
-                            "我们已经相爱了:",
-                          ),
-                          h(
-                            "span",
-                            {
-                              class: "love-time",
-                              style: Style.eachOtherLove.time.style,
-                            },
-                            [
-                              h(
-                                "span", {
-                                  class: "time",
-                                  style: Style.time.style,
-                                },
-                                this.love.day,
-                              ),
-                              "天",
-                              h(
-                                "span", {
-                                  class: "time",
-                                  style: Style.time.style,
-                                },
-                                this.love.hour,
-                              ),
-                              "小时",
-                              h(
-                                "span", {
-                                  class: "time",
-                                  style: Style.time.style,
-                                },
-                                this.love.minute,
-                              ),
-                              "分",
-                              h(
-                                "span", {
-                                  class: "time",
-                                  style: Style.time.style,
-                                },
-                                this.love.second,
-                              ),
-                              "秒",
-                            ]
+                            "",
                           )
                         ]
                       )
@@ -190,18 +115,6 @@ export default {
     showCanvasInfo: false,
     excludeWish: [],
     allowClick: false,
-    meet: {
-      day: 0,
-      hour: 0,
-      minute: 0,
-      second: 0,
-    },
-    love: {
-      day: 0,
-      hour: 0,
-      minute: 0,
-      second: 0,
-    }
   }),
   mounted () {
     Style.init(this.$refs.cake);
@@ -228,7 +141,7 @@ export default {
       // 初始化已经显示的话
       this.excludeWish = [this.$store.state.historyWish.length];
       // let typingContent = TypingContent
-      let typingContent = this.$store.state.happyWords;
+      let typingContent = this.$store.state.loveLetters;
       this.typingContent(typingContent);
       // 时间计时器
       this.timeInterval = setInterval(() => {
@@ -238,26 +151,8 @@ export default {
         }
         if (this.cake.runState == 0) {
           this.showCanvasInfo = true;
+          clearTimeout(this.timeInterval);
         }
-        let currentDate = new Date().getTime();
-        // 相遇时间
-        let diffMeet = parseInt((currentDate - this.$store.state.meetDate) / 1000);
-        this.meet.day = parseInt(diffMeet / (24 * 60 * 60));
-        diffMeet -= this.meet.day * 24 * 60 * 60;
-        this.meet.hour = parseInt(diffMeet / (60 * 60));
-        diffMeet -= this.meet.hour * 60 * 60;
-        this.meet.minute = parseInt(diffMeet / 60);
-        diffMeet -= this.meet.minute * 60;
-        this.meet.second = diffMeet % 60;
-        // 相爱时间
-        let diffLove = parseInt((currentDate - this.$store.state.loveDate) / 1000);
-        this.love.day = parseInt(diffLove / (24 * 60 * 60));
-        diffLove -= this.love.day * 24 * 60 * 60;
-        this.love.hour = parseInt(diffLove / (60 * 60));
-        diffLove -= this.love.hour * 60 * 60;
-        this.love.minute = parseInt(diffLove / 60);
-        diffLove -= this.love.minute * 60;
-        this.love.second = diffLove % 60;
       }, 60);
     },
     stop() {
@@ -367,7 +262,7 @@ export default {
         }
         this.excludeWish.push(nextIndex);
         if (nextIndex >= this.$store.state.historyWish.length) {
-          this.typingContent(this.$store.state.happyWords);
+          this.typingContent(this.$store.state.loveLetters);
           clearTimeout(timeout);
           return;
         }
@@ -528,7 +423,7 @@ let Style = {
       width: "3rem",
       height: "3rem",
       maxWidth: "670px",
-      maxheight: "625px",
+      maxHeight: "625px",
       minWidth: "300px",
       minHeight: "300px",
     }
@@ -555,18 +450,13 @@ let Style = {
       right: "0.6rem",
       display: "flex",
       flexDirection: "column",
-      fontSize: "0.10rem"
+      fontSize: "0.15rem"
     },
     desc: {
       style: {
-
-      }
-    },
-    time: {
-      style: {
         textAlign: "right",
       }
-    }
+    },
   },
   eachOtherLove: {
     style: {
@@ -576,25 +466,12 @@ let Style = {
       right: "0.6rem",
       display: "flex",
       flexDirection: "column",
-      fontSize: "0.10rem"
+      fontSize: "0.15rem"
     },
     desc: {
       style: {
-
-      }
-    },
-    time: {
-      style: {
         textAlign: "right",
       }
-    }
+    },
   },
-  time: {
-    style: {
-      fontSize: "0.17rem",
-      display: "inline-block",
-      minWidth: "0.25rem",
-      textAlign: "center",
-    }
-  }
 }
