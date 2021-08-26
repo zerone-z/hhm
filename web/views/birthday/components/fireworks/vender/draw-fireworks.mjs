@@ -1,4 +1,4 @@
-const Path = "web/views/birthday/components/fireworks/vender/assets/"
+const Path = "/web/views/birthday/components/fireworks/vender/assets/"
 function Fireworks(canvas) {
   this.canvas = canvas;
   this.pi=Math.PI;
@@ -16,8 +16,7 @@ function Fireworks(canvas) {
   this.gravity=.02;
   this.seeds=new Array();
   this.sparkPics=new Array();
-  this.s=window.location.href + Path;
-  // this.s="https://cantelope.org/NYE/";
+  this.s=Path;
   for(let i=1;i<=10;++i){
     let sparkPic=new Image();
     sparkPic.src=this.s+"spark"+i+".png";
