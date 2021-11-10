@@ -1,0 +1,9 @@
+{
+  "liveServer.settings.ChromeDebuggingAttachment": true,
+  "liveServer.settings.AdvanceCustomBrowserCmdLine": "",
+  "liveServer.settings.CustomBrowser": "microsoft-edge",
+  "[javascript]": {
+      "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "liveServer.settings.file": "404.html"
+}

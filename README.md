@@ -31,7 +31,7 @@ Live Server 安装好以后，可以在 VS Code 右下角有个看到 **Go Live*
 
 ps: 这里的 **url** 字段中的端口号 **5500** 要与 **Live Server** 提供的端口号保持一致。
 
-然后使用 ***Run and Debug** 运行该配置 **HHMDebugger** ，执行调试。
+然后使用 ***Run and Debug** 运行该配置 **HHM Debugger** ，执行调试。
 ### 保持只打开一个浏览器窗口
 
 在使用 **Live Server** 和 **Run and Debug** 你会发现会打开两个窗口。为避免该情况发生，需要增加如下配置： 
