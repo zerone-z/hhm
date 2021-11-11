@@ -12,11 +12,11 @@ const routes = [
       let year = ("00" + date.getFullYear()).slice(-4);
       let month = ("00" + (date.getMonth() + 1)).slice(-2);
       let day = ("00" + date.getDate()).slice(-2);
-      let home = { path: "/birthday" }
+      let home = { path: "/%E7%94%9F%E6%97%A5" }
       if (Stroes.state.birthdayDate.includes(year + month + day)) {
-        home = { path: "/birthday" }
+        home = { path: "/%E7%94%9F%E6%97%A5" }
       } else if (Stroes.state.weddingDate.includes(year + month + day)) {
-        home = { path: "/wedding" };
+        home = { path: "/%E7%BB%93%E5%A9%9A" };
       }
       return home
     },
@@ -32,6 +32,11 @@ const routes = [
     component: Birthday
   },
   {
+    path: "/%E7%94%9F%E6%97%A5",
+    name: "%E7%94%9F%E6%97%A5",
+    component: Birthday
+  },
+  {
     path: "/love",
     name: "love",
     component: Love
@@ -39,6 +44,11 @@ const routes = [
   {
     path: "/wedding",
     name: "wedding",
+    component: Wedding
+  },
+  {
+    path: "/%E7%BB%93%E5%A9%9A",
+    name: "%E7%BB%93%E5%A9%9A",
     component: Wedding
   }
 ]
