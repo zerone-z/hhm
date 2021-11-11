@@ -2,7 +2,7 @@ import Stroes from "./stores.mjs"
 import PageNotFound from "./views/404/404.mjs"
 import Birthday from "./views/birthday/birthday.mjs"
 import Love from "./views/love/love.mjs"
-import Wedding from "./views/Wedding/Wedding.mjs"
+import Wedding from "./views/wedding/wedding.mjs"
 
 const routes = [
   {
