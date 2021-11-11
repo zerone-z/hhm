@@ -32,7 +32,7 @@ const routes = [
     component: Birthday
   },
   {
-    path: "/%E7%94%9F%E6%97%A5",
+    path: "/%E7%94%9F%E6%97%A5", //  生日 对应URL编码，可以通过中文路径显示
     name: "%E7%94%9F%E6%97%A5",
     component: Birthday
   },
@@ -47,7 +47,7 @@ const routes = [
     component: Wedding
   },
   {
-    path: "/%E7%BB%93%E5%A9%9A",
+    path: "/%E7%BB%93%E5%A9%9A",  // 结婚 对应URL编码，可以通过中文路径显示
     name: "%E7%BB%93%E5%A9%9A",
     component: Wedding
   }
