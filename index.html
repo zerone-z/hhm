@@ -52,9 +52,11 @@
       (function(){
 				let redirect = sessionStorage.redirect;
 				delete sessionStorage.redirect;
-				if (redirect && redirect != location.href) {
-					history.replaceState(null, null, redirect);
-				}
+				// 注释以下代码，不需要调整到404之前的地址
+				// if (redirect && redirect != location.href) {
+				//  重新跳转到404之前的页面
+				// 	history.replaceState(null, null, redirect);
+				// }
 			})();
     </script>
 	</head>

@@ -12,11 +12,11 @@ const routes = [
       let year = ("00" + date.getFullYear()).slice(-4);
       let month = ("00" + (date.getMonth() + 1)).slice(-2);
       let day = ("00" + date.getDate()).slice(-2);
-      let home = { path: "/%E7%94%9F%E6%97%A5" }
+      let home = { path: "/%E7%94%9F%E6%97%A5"};  // 生日
       if (Stroes.state.birthdayDate.includes(year + month + day)) {
-        home = { path: "/%E7%94%9F%E6%97%A5" }
+        home = { path: "/%E7%94%9F%E6%97%A5" };   // 生日
       } else if (Stroes.state.weddingDate.includes(year + month + day)) {
-        home = { path: "/%E7%BB%93%E5%A9%9A" };
+        home = { path: "/%E7%BB%93%E5%A9%9A" };   // 结婚
       }
       return home
     },
