@@ -9,7 +9,8 @@ export default {
       "div", {
         class: "page-wedding",
         style: Style.pageWedding.style,
-        ref: "page"
+        ref: "page",
+        onClick: ($event) => { this.play() }
       },
       [
         h(
@@ -30,11 +31,22 @@ export default {
     );
   },
   data: () => ({
-    
+    music: null,
   }),
   mounted () {
     Style.init(this.$refs.page);
     this.run();
+    this.music = document.getElementById("wedding");
+    if (this.music) {
+      this.music.load();
+      this.music.currentTime = 0;
+      this.music.play();
+    }
+  },
+  unmounted() {
+    if (this.music) {
+      this.music.pause();
+    }
   },
   destroyed () {
     if (this.loveTreeDraw) {
@@ -50,6 +62,15 @@ export default {
     }
   },
   methods: {
+    play() {
+      if (this.music) {
+        if (this.music.duration > 0 && !this.music.paused) {
+          this.music.pause();
+        } else {
+          this.music.play();  
+        }
+      }
+    },
     run() {
       if (this.timeInterval) {
         clearTimeout(this.timeInterval);

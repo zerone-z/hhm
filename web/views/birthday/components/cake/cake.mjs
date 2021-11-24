@@ -1,7 +1,6 @@
 const { h, vShow, Transition, withDirectives } = Vue;
 import StarrySky from "./components/starry-sky/starry-sky.mjs";
 import DrawCake from "./vender/draw-cake.mjs";
-import TypingContent from "./assets/typingContent.mjs"
 // Vue组件
 export default {
   name: "Cake",
@@ -140,7 +139,6 @@ export default {
       this.drawCake();
       // 初始化已经显示的话
       this.excludeWish = [this.$store.state.historyWish.length];
-      // let typingContent = TypingContent
       let typingContent = this.$store.state.loveLetters;
       this.typingContent(typingContent);
       // 时间计时器

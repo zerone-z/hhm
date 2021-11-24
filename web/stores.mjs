@@ -1,5 +1,7 @@
 const store = {
   state: {
+    // 当前日期
+    currentDate: new Date(),
     // 老婆出生日期 1992-08-18 00:00:00
     birthday: 714067200000,
     // 生日日期
@@ -188,6 +190,62 @@ const store = {
     <p style="text-align: right">你的雪健</p>
     <p style="text-align: right">二零二一年十一月二十八日</p>
     `,
+    // 重要事件
+    milestones: [{
+      label: "初识",
+      date: "2018/3/31",
+      time: "23:36:00",
+    }, {
+      label: "初见",
+      date: "2018/5/6",
+      time: "11:30:00",
+    }, {
+      label: "牵手",
+      date: "2018/5/12",
+      time: "05:00",
+    }, {
+      label: "初吻",
+      date: "2018/5/26",
+      time: "20:00:00",
+    }, {
+      label: "见家长",
+      date: "2018/7/7",
+      time: "",
+    }, {
+      label: "腌鸡蛋",
+      date: "2018/10/28",
+      time: "21:32",
+    }, {
+      label: "我们领证了",
+      date: "2019/12/30",
+      time: "",
+    }, {
+      label: "我们举行婚礼了",
+      date: "2020/11/9",
+      time: "",
+    }, {
+      label: "蜜月之旅",
+      date: "2020/11/11",
+      time: "",
+    }]
+  },
+  getters: {
+    milestones(state) {
+      let year = state.currentDate.getFullYear();
+      let month = state.currentDate.getMonth() + 1;
+      let date = state.currentDate.getDate();
+      let today = new Date(year + "/" + month + "/" + date).getTime();
+      let list = [];
+      for (const item of state.milestones) {
+        let dayCount = (today - new Date(item.date)) / (24 * 60 * 60 * 1000) + 1;
+        list.push({
+          label: item.label,
+          datetime: item.date.replace(/\//g, "-"),
+          dayCount: dayCount,
+        })
+      }
+      return list;
+    }
   },
   mutations: {
     
