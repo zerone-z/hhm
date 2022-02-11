@@ -6,7 +6,7 @@
 func world() {
 	// 世界因你开始变得精彩
 	let you = new Girl("HHM");
-	// 我因有你开始了生活
+	// 我因有你开始了幸福生活
 	let i = new Boy("LPD", sweetHeart: you);
 
 	// 自从与你相遇，我愿往后生命的每一天里都有你，至死方休
