@@ -1,5 +1,27 @@
 # hhm
 
+## Love Code
+
+```swift
+func world() {
+	// 世界因你开始变得精彩
+	let you = new Girl("HHM");
+	// 我因有你开始了生活
+	let i = new Boy("LPD", sweetHeart: you);
+
+	// 自从与你相遇，我愿往后生命的每一天里都有你，至死方休
+	while (i.meet(you)) {
+		i.life.have(you)
+	}
+
+	// 若你不爱，默默守护，不打扰是我的温柔；若你倾心，爱你是我一生的荣光
+	if (you.lover != i) {
+		i.silentGuard(you)
+	} else {
+		i.deepLove(you)
+	}
+}
+```
 ## 运行
 
 使用 [Visual Studio Code](https://code.visualstudio.com/) 工具打开项目。
